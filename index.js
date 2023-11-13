@@ -98,17 +98,17 @@ async function comparePlaylists() {
         const accessToken = await getAccessToken();
         console.log("Logged in!")
 
-        // Get saved tracks and playlist tracks
-        const savedTracks = await getSavedTracks(accessToken);
-        // console.log("Number of saved tracks:", savedTracks.length);
+        // // Get saved tracks and playlist tracks
+        // const savedTracks = await getSavedTracks(accessToken);
+        // // console.log("Number of saved tracks:", savedTracks.length);
 
-        // // Get playlist info
-        // const playlist = await getPlaylist(accessToken, playlist2Id);
-        // console.log(playlist.name)
+        // Get playlist info
+        const playlist = await getPlaylist(accessToken, playlist2Id);
+        console.log(playlist.name)
         
-        // // get playlist tracks
-        // const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
-        // console.log(Object.keys(playlistTracks).length);
+        // get playlist tracks
+        const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
+        console.log(Object.keys(playlistTracks).length);
 
         // // Compare saved tracks and playlist, and remove duplicates
         // const songsToDelete = [];
