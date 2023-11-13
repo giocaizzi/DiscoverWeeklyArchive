@@ -10,24 +10,53 @@ const clientSecret = process.env.CLIENT_SECRET;
 
 // Spotify API endpoints
 const apiBaseUrl = 'https://api.spotify.com/v1';
-const authUrl = 'https://accounts.spotify.com/api/token';
+const tokenUrl = 'https://accounts.spotify.com/api/token';
+const authUrl = 'https://accounts.spotify.com/authorize';
+const redirectUri = new URL('http://localhost:8888/callback');
 
 // Example playlists
 const playlist2Id = process.env.PLAYLIST_ID;
 
+// scopes
+const scope = 'user-library-read';
+
+// state random string
+function generateRandomString(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
+// login
+async function login() {
+    const state = generateRandomString(16);
+    const params = {
+        response_type: 'code',
+        client_id: clientId,
+        scope: scope,
+        redirect_uri: redirectUri,
+        state: state
+      };
+      authUrl = new URLSearchParams(params).toString();
+
+      const response = await fetch(authUrl, {
+        method: 'GET',
+      });
+    
+      if (!response.ok) {
+        throw new Error(`Spotify API request failed with status ${response.status}`);
+      }
+
+      return await response.json();
+    }
+
 // Function to get access token
 async function getAccessToken() {
-    // Define your scopes
-    const scopes = [
-        'user-library-read',
-        // 'playlist-read-private',
-        //  'playlist-modify-private'
-    ];
 
-    // Convert scopes array to a space-separated string
-    const scopesString = scopes.join(' ');
-
-    const response = await fetch(authUrl, {
+    const response = await fetch(tokenUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,8 +123,9 @@ async function getSavedTracks(accessToken) {
 // Function to compare playlists
 async function comparePlaylists() {
     try {
+        console.log(login(""));
         // Get access tokens
-        const accessToken = await getAccessToken();
+        // const accessToken = await getAccessToken();
         console.log("Logged in!")
 
         // // Get saved tracks and playlist tracks
