@@ -20,7 +20,7 @@ async function getAccessToken() {
     // Define your scopes
     const scopes = [
         'user-library-read',
-        'playlist-read-private',
+        // 'playlist-read-private',
         //  'playlist-modify-private'
     ];
 
@@ -33,7 +33,9 @@ async function getAccessToken() {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64'),
         },
-        body: `grant_type=client_credentials&scope=${encodeURIComponent(scopesString)}`,
+        // body: `grant_type=client_credentials&scope=${encodeURIComponent(scopesString)}`,
+        body: `grant_type=client_credentials&scope=user-library-read`,
+
     });
 
     const data = await response.json();
@@ -49,7 +51,9 @@ async function fetchFromSpotify(url, accessToken) {
     });
 
     if (!response.ok) {
-        console.log(response.url);
+        console.error(`Spotify API request failed with status ${response.status}`);
+        const responseBody = await response.text();
+        console.error(`Response body: ${responseBody}`);
         throw new Error(`Spotify API request failed with status ${response.status}`);
     } else {
         return await response.json();
@@ -57,7 +61,7 @@ async function fetchFromSpotify(url, accessToken) {
 }
 
 // Function to fetch all pages
-async function fetchAllPages(url, accessToken) {
+async function fetchFromSpotifyPaginated(url, accessToken) {
     let items = [];
     let nextPageUrl = url;
 
@@ -79,12 +83,12 @@ async function getPlaylist(accessToken, playlistId) {
 
 // Function to get playlist tracks
 async function getPlaylistTracks(accessToken, playlistId) {
-    return await fetchAllPages(`${apiBaseUrl}/playlists/${playlistId}/tracks`, accessToken);
+    return await fetchFromSpotifyPaginated(`${apiBaseUrl}/playlists/${playlistId}/tracks`, accessToken);
 }
 
 // Function to get saved tracks
 async function getSavedTracks(accessToken) {
-    return await fetchAllPages(`${apiBaseUrl}/me/tracks`, accessToken);
+    return await fetchFromSpotifyPaginated(`${apiBaseUrl}/me/tracks`, accessToken);
 }
 
 // Function to compare playlists
@@ -95,17 +99,16 @@ async function comparePlaylists() {
         console.log("Logged in!")
 
         // Get saved tracks and playlist tracks
-        // const savedTracks = await getSavedTracks(accessToken);
-        // console.log(savedTracks[0])
-        // // console.log("Number of saved tracks:", savedTracks.length);
+        const savedTracks = await getSavedTracks(accessToken);
+        // console.log("Number of saved tracks:", savedTracks.length);
 
-        // Get playlist info
-        const playlist = await getPlaylist(accessToken, playlist2Id);
-        console.log(playlist.name)
+        // // Get playlist info
+        // const playlist = await getPlaylist(accessToken, playlist2Id);
+        // console.log(playlist.name)
         
-        // get playlist tracks
-        const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
-        console.log(Object.keys(playlistTracks).length);
+        // // get playlist tracks
+        // const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
+        // console.log(Object.keys(playlistTracks).length);
 
         // // Compare saved tracks and playlist, and remove duplicates
         // const songsToDelete = [];
