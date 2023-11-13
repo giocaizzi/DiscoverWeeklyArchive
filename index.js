@@ -40,41 +40,51 @@ async function getAccessToken() {
     return data.access_token;
 }
 
-// Function to make API requests
+// Function to make /GET request to Spotify API
 async function fetchFromSpotify(url, accessToken) {
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-            },
+    const response = await fetch(url, {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+        },
+    });
 
-        });
-        if (!response.ok) {
-            console.log(response);
-            throw new Error(`Spotify API request failed with status ${response.status}`);
-
-        } else {
-            const data = await response.json();
-            return data;
-        }
-
-
-    } catch (error) {
-        console.error('Error:', error.message);
+    if (!response.ok) {
+        console.log(response.url);
+        throw new Error(`Spotify API request failed with status ${response.status}`);
+    } else {
+        return await response.json();
     }
+}
+
+// Function to fetch all pages
+async function fetchAllPages(url, accessToken) {
+    let items = [];
+    let nextPageUrl = url;
+
+    while (nextPageUrl) {
+        const data = await fetchFromSpotify(nextPageUrl, accessToken);
+        items = items.concat(data.items);
+
+        // If there's a next page, update nextPageUrl, otherwise set it to null
+        nextPageUrl = data.next ? data.next : null;
+    }
+    // returns a list of all concatenated items
+    return items;
+}
+
+// Function to get a playlist
+async function getPlaylist(accessToken, playlistId) {
+    return await fetchFromSpotify(`${apiBaseUrl}/playlists/${playlistId}`, accessToken);
 }
 
 // Function to get playlist tracks
 async function getPlaylistTracks(accessToken, playlistId) {
-    const data = await fetchFromSpotify(`${apiBaseUrl}/playlists/${playlistId}/tracks`, accessToken);
-    return data.items.map(item => item.track.name);
+    return await fetchAllPages(`${apiBaseUrl}/playlists/${playlistId}/tracks`, accessToken);
 }
 
 // Function to get saved tracks
 async function getSavedTracks(accessToken) {
-    const data = await fetchFromSpotify(`${apiBaseUrl}/me/tracks`, accessToken);
-    console.log(data);
-    // return data.items.map(item => item.track.name);
+    return await fetchAllPages(`${apiBaseUrl}/me/tracks`, accessToken);
 }
 
 // Function to compare playlists
@@ -85,12 +95,17 @@ async function comparePlaylists() {
         console.log("Logged in!")
 
         // Get saved tracks and playlist tracks
-        const savedTracks = await getSavedTracks(accessToken);
+        // const savedTracks = await getSavedTracks(accessToken);
         // console.log(savedTracks[0])
         // // console.log("Number of saved tracks:", savedTracks.length);
 
-
-        // const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
+        // Get playlist info
+        const playlist = await getPlaylist(accessToken, playlist2Id);
+        console.log(playlist.name)
+        
+        // get playlist tracks
+        const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
+        console.log(Object.keys(playlistTracks).length);
 
         // // Compare saved tracks and playlist, and remove duplicates
         // const songsToDelete = [];
