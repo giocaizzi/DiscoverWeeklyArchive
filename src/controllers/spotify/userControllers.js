@@ -10,7 +10,7 @@ export function homepage(req, res) {
         res.redirect('/user');
     } else {
         // else send login page text
-        res.send({"message":'Login to use DiscoverWeeklyArchive!'});
+        res.json({"message":'Login to use DiscoverWeeklyArchive!'});
     }
 }
 
@@ -21,7 +21,7 @@ export function user(req, res) {
         getUserInfo(req.session.access_token)
             .then(
                 // if successful send user info
-                userInfo => res.send(userInfo))
+                userInfo => res.status(200).json(userInfo))
             .catch(
                 // else send error
                 error => res.status(500).send(error));

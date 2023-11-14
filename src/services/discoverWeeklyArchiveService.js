@@ -1,6 +1,14 @@
 
-export function discoverWeeklyArchive (playlistId) {
-    console.log('discoverWeeklyArchive')
-    console.log("Comparing user's playlist with saved tracks...")
-    console.log('playlistId: ', playlistId)
+export function discoverWeeklyArchive(playlistId) {
+    return new Promise((resolve, reject) => {
+        if (playlistId) {
+            resolve({
+                'endpoint': 'discoverWeeklyArchive',
+                "message": "Successfully executed DiscoverWeeklyArchive.",
+                "playlistId": playlistId
+            })
+        } else {
+            reject('discoverWeeklyArchive')
+        }
+    });
 }
