@@ -33,7 +33,7 @@ export function homepage (req, res) {
             res.send(body);
         });
     } else {
-        // do nothing
+        // otherwise do nothing
         res.send('Login to use DiscoverWeeklyArchive!');
     }
 }
