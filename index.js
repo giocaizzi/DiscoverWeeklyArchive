@@ -52,6 +52,24 @@ app.use(session({
 
 // ROUTES
 
+app.get('/', function (req, res) {
+  // if logged, in get user info
+  if (req.session.access_token) {
+    var options = {
+      url: 'https://api.spotify.com/v1/me',
+      headers: { 'Authorization': 'Bearer ' + req.session.access_token },
+      json: true
+    };
+
+    // use the access token to access the Spotify Web API
+    request.get(options, function (error, response, body) {
+      res.send(body);
+    });
+  } else {
+    // do nothing
+    res.send('Login to use DiscoverWeeklyArchive!');
+}});
+
 app.get('/login', function (req, res) {
   // login with auth
   var state = generateRandomString(16);
@@ -104,12 +122,10 @@ app.get('/callback', function (req, res) {
 
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
-
+        // Store the tokens safely here
         req.session.access_token = body.access_token;
         req.session.refresh_token = body.refresh_token;
-        // Store the tokens safely here
-
-        res.send('Tokens retrieved successfully');
+        res.redirect(baseurl);
       }
     });
   }
