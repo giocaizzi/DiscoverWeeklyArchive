@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import config from '../config.js';
 // services
 import { getUserInfo } from '../services/spotify/user.js';
+import { getTokens } from '../services/spotify/login.js';
 
 //utils
 const generateRandomString = (length) => {
@@ -119,27 +120,19 @@ export function callback(req, res) {
     } else {
         // it's a valid stare
         res.clearCookie(config.stateKey);
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            form: {
-                code: code,
-                redirect_uri: config.redirect_uri,
-                grant_type: 'authorization_code'
-            },
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                Authorization: 'Basic ' + (new Buffer.from(config.client_id + ':' + config.client_secret).toString('base64'))
-            },
-            json: true
-        };
-
-        request.post(authOptions, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                // Store the tokens safely here
-                req.session.access_token = body.access_token;
-                req.session.refresh_token = body.refresh_token;
-                res.redirect("/");
-            }
-        });
+        // get tokens
+        getTokens(code)
+            .then(
+                // if successful
+                tokens => {
+                    // store tokens in session
+                    req.session.access_token = tokens.access_token;
+                    req.session.refresh_token = tokens.refresh_token;
+                    // redirect to homepage
+                    res.redirect('/');
+                })
+            .catch(
+                // else send error
+                error => res.status(500).send(error));
     }
 }
