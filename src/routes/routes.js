@@ -3,7 +3,7 @@ import express from 'express';
 // controllers
 import { login,callback,logout, refreshToken } from '../controllers/spotify/loginControllers.js';
 import { homepage,user } from '../controllers/spotify/userControllers.js';
-import { discoverWeeklyArchive } from '../controllers/discoverWeeklyArchiveControllers.js';
+import { discoverWeeklyArchiveController } from '../controllers/discoverWeeklyArchiveController.js';
 
 
 // set router
@@ -26,6 +26,6 @@ router.get('/refresh-token',refreshToken );
 router.get('/user', user);
 
 //discover-weekly-archive
-router.get('/discover-weekly-archive', discoverWeeklyArchive);
+router.get('/discover-weekly-archive/:playlistId', discoverWeeklyArchiveController);
 
 export default router;
