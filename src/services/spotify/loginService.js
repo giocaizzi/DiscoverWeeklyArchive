@@ -1,18 +1,19 @@
 import request from 'request';
 import config from '../../config.js';
 
-export function getTokens(code) {
+export function getTokens(code, isRenewal = false, refresh_token = null) {
   return new Promise((resolve, reject) => {
     var authOptions = {
       url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: config.redirect_uri,
-        grant_type: 'authorization_code'
-      },
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
         Authorization: 'Basic ' + (new Buffer.from(config.client_id + ':' + config.client_secret).toString('base64'))
+      },
+      form: {
+        grant_type: isRenewal ? 'refresh_token' : 'authorization_code',
+        code: isRenewal ? null : code,
+        refresh_token: isRenewal ? refresh_token : null,
+        redirect_uri: config.redirect_uri
       },
       json: true
     };

@@ -45,9 +45,10 @@ export function login(req, res) {
     res.cookie(config.stateKey, state);
 
     // application requests authorization
-    // by redirecting to authorize endpoint
-    // if the request is accepted 
-    // redirected to callback endpoint
+    // by requesting to "authorize endpoint"
+    // if request is successful, the user is redirected to the redirect_uri
+    // with the authorization code
+
     var scope = 'user-read-private user-read-email';
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
@@ -73,34 +74,18 @@ export function logout(req, res) {
 
 
 // refresh token when expired
-
 export function refreshToken(req, res) {
-
     var refresh_token = req.query.refresh_token;
-    var authOptions = {
-        url: 'https://accounts.spotify.com/api/token',
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-        },
-        form: {
-            grant_type: 'refresh_token',
-            refresh_token: refresh_token
-        },
-        json: true
-    };
-
-    request.post(authOptions, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var access_token = body.access_token,
-                refresh_token = body.refresh_token;
-            res.send({
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            });
-        }
-    });
+    getTokens(refresh_token, isRenewal = true)
+        .then(
+            tokens => {
+                req.session.access_token = tokens.access_token;
+                req.session.refresh_token = tokens.refresh_token;
+                res.redirect('/');
+            })
+        .catch(error => res.status(500).send(error));
 }
+
 
 
 // callback
@@ -111,14 +96,17 @@ export function callback(req, res) {
     var state = req.query.state || null;
     var storedState = req.cookies ? req.cookies[config.stateKey] : null;
 
+    /// check the state
     if (state === null || state !== storedState) {
-        // state mismatch
+        // if there is a state mismatch, error
         res.redirect('/#' +
+            // querystring.stringify converts object to string
             querystring.stringify({
                 error: 'state_mismatch'
             }));
     } else {
-        // it's a valid stare
+        // else it's a valid stare
+        // clear cookie
         res.clearCookie(config.stateKey);
         // get tokens
         getTokens(code)
