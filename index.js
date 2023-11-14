@@ -11,14 +11,14 @@ const clientSecret = process.env.CLIENT_SECRET;
 // Spotify API endpoints
 const apiBaseUrl = 'https://api.spotify.com/v1';
 const tokenUrl = 'https://accounts.spotify.com/api/token';
-const authUrl = 'https://accounts.spotify.com/authorize';
-const redirectUri = new URL('http://localhost:8888/callback');
+const authUrl = new URL('https://accounts.spotify.com/authorize');
+const redirectUri = new URL('https://localhost:8888/callback');
 
 // Example playlists
 const playlist2Id = process.env.PLAYLIST_ID;
 
 // scopes
-const scope = 'user-library-read';
+var scope = 'user-library-read';
 
 // state random string
 function generateRandomString(length) {
@@ -32,15 +32,14 @@ function generateRandomString(length) {
 
 // login
 async function login() {
-    const state = generateRandomString(16);
     const params = {
         response_type: 'code',
         client_id: clientId,
         scope: scope,
         redirect_uri: redirectUri,
-        state: state
+        state: generateRandomString(16)
       };
-      authUrl = new URLSearchParams(params).toString();
+      authUrl.search = new URLSearchParams(params).toString();
 
       const response = await fetch(authUrl, {
         method: 'GET',
@@ -128,28 +127,28 @@ async function comparePlaylists() {
         // const accessToken = await getAccessToken();
         console.log("Logged in!")
 
-        // // Get saved tracks and playlist tracks
-        // const savedTracks = await getSavedTracks(accessToken);
-        // // console.log("Number of saved tracks:", savedTracks.length);
+        // // // Get saved tracks and playlist tracks
+        // // const savedTracks = await getSavedTracks(accessToken);
+        // // // console.log("Number of saved tracks:", savedTracks.length);
 
-        // Get playlist info
-        const playlist = await getPlaylist(accessToken, playlist2Id);
-        console.log(playlist.name)
+        // // Get playlist info
+        // const playlist = await getPlaylist(accessToken, playlist2Id);
+        // console.log(playlist.name)
         
-        // get playlist tracks
-        const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
-        console.log(Object.keys(playlistTracks).length);
+        // // get playlist tracks
+        // const playlistTracks = await getPlaylistTracks(accessToken, playlist2Id);
+        // console.log(Object.keys(playlistTracks).length);
 
-        // // Compare saved tracks and playlist, and remove duplicates
-        // const songsToDelete = [];
-        // playlistTracks.forEach(playlistTrack => {
-        //     const index = savedTracks.findIndex(savedTrack => savedTrack.name === playlistTrack.name);
-        //     console.log("Looking for matches for track:", playlistTrack.name)
-        //     if (index !== -1) {
-        //         songsToDelete.push(savedTracks[index]);
-        //         savedTracks.splice(index, 1);
-        //     }
-        // });
+        // // // Compare saved tracks and playlist, and remove duplicates
+        // // const songsToDelete = [];
+        // // playlistTracks.forEach(playlistTrack => {
+        // //     const index = savedTracks.findIndex(savedTrack => savedTrack.name === playlistTrack.name);
+        // //     console.log("Looking for matches for track:", playlistTrack.name)
+        // //     if (index !== -1) {
+        // //         songsToDelete.push(savedTracks[index]);
+        // //         savedTracks.splice(index, 1);
+        // //     }
+        // // });
     } catch (error) {
         console.error('Error:', error.message);
     }
