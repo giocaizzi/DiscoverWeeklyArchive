@@ -10,7 +10,7 @@ export function homepage(req, res) {
         res.redirect('/user');
     } else {
         // else send login page text
-        res.send('Login to use DiscoverWeeklyArchive!');
+        res.send({"message":'Login to use DiscoverWeeklyArchive!'});
     }
 }
 
