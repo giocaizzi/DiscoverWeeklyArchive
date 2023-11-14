@@ -11,30 +11,34 @@ import { getUserInfo } from '../services/services.js';
 //utils
 const generateRandomString = (length) => {
     return crypto
-      .randomBytes(60)
-      .toString('hex')
-      .slice(0, length);
-  }
-  
+        .randomBytes(60)
+        .toString('hex')
+        .slice(0, length);
+}
+
 
 
 
 // homepage
-export function homepage (req, res) {
+export function homepage(req, res) {
     // if the user is logged in get user info
-    // else redirect to login page
     if (req.session.access_token) {
-      getUserInfo(req.session.access_token)
-        .then(userInfo => res.send(userInfo))
-        .catch(error => res.status(500).send(error));
+        getUserInfo(req.session.access_token)
+            .then(
+                // if successful send user info
+                userInfo => res.send(userInfo))
+            .catch(
+                // else send error
+                error => res.status(500).send(error));
     } else {
-      res.send('Login to use DiscoverWeeklyArchive!');
+        // else send login page text
+        res.send('Login to use DiscoverWeeklyArchive!');
     }
-  }
+}
 
 
 // login
-export function login (req, res) {
+export function login(req, res) {
     // login with auth
     var state = generateRandomString(16);
     res.cookie(config.stateKey, state);
@@ -99,7 +103,7 @@ export function refreshToken(req, res) {
 
 
 // callback
-export function callback (req, res) {
+export function callback(req, res) {
     // application requests refresh and access tokens
     // after checking the state parameter
     var code = req.query.code || null;
