@@ -1,5 +1,32 @@
 import request from 'request';
+import querystring from 'querystring';
+import crypto from 'crypto';
+
+
+// config
 import config from '../../config.js';
+
+//utils
+export const generateRandomString = (length) => {
+  return crypto
+      .randomBytes(60)
+      .toString('hex')
+      .slice(0, length);
+}
+
+export function generateAuthUrl(state) {
+  var scope = 'user-read-private user-read-email';
+  return 'https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: config.client_id,
+      scope: scope,
+      redirect_uri: config.redirect_uri,
+      state: state
+    });
+}
+
+//get tokens, either by authorization code or refresh token
 
 export function getTokens(code, isRenewal = false, refresh_token = null) {
   return new Promise((resolve, reject) => {

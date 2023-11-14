@@ -1,21 +1,12 @@
-import request from 'request';
 import querystring from 'querystring';
-import crypto from 'crypto';
 
 
 // config
 import config from '../config.js';
 // services
 import { getUserInfo } from '../services/spotify/userService.js';
-import { getTokens } from '../services/spotify/loginService.js';
+import { generateRandomString, generateAuthUrl, getTokens } from '../services/spotify/loginService.js';
 
-//utils
-const generateRandomString = (length) => {
-    return crypto
-        .randomBytes(60)
-        .toString('hex')
-        .slice(0, length);
-}
 
 
 
@@ -41,23 +32,14 @@ export function homepage(req, res) {
 // login
 export function login(req, res) {
     // login with auth
-    var state = generateRandomString(16);
-    res.cookie(config.stateKey, state);
-
     // application requests authorization
     // by requesting to "authorize endpoint"
     // if request is successful, the user is redirected to the redirect_uri
     // with the authorization code
-
-    var scope = 'user-read-private user-read-email';
-    res.redirect('https://accounts.spotify.com/authorize?' +
-        querystring.stringify({
-            response_type: 'code',
-            client_id: config.client_id,
-            scope: scope,
-            redirect_uri: config.redirect_uri,
-            state: state
-        }));
+    // random state is generated to prevent CSRF attacks (see API docs)
+    var state = generateRandomString(16);
+    res.cookie(config.stateKey, state);
+    res.redirect(generateAuthUrl(state));
 }
 
 
