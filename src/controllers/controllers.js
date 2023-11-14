@@ -5,6 +5,8 @@ import crypto from 'crypto';
 
 // config
 import config from '../config.js';
+// services
+import { getUserInfo } from '../services/services.js';
 
 //utils
 const generateRandomString = (length) => {
@@ -19,24 +21,16 @@ const generateRandomString = (length) => {
 
 // homepage
 export function homepage (req, res) {
-    // if logged, in get user info
+    // if the user is logged in get user info
+    // else redirect to login page
     if (req.session.access_token) {
-        // get user info
-        var options = {
-            url: 'https://api.spotify.com/v1/me',
-            headers: { 'Authorization': 'Bearer ' + req.session.access_token },
-            json: true
-        };
-
-        // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
-            res.send(body);
-        });
+      getUserInfo(req.session.access_token)
+        .then(userInfo => res.send(userInfo))
+        .catch(error => res.status(500).send(error));
     } else {
-        // otherwise do nothing
-        res.send('Login to use DiscoverWeeklyArchive!');
+      res.send('Login to use DiscoverWeeklyArchive!');
     }
-}
+  }
 
 
 // login
@@ -59,8 +53,6 @@ export function login (req, res) {
             state: state
         }));
 }
-
-
 
 
 // logout
