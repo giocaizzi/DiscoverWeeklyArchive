@@ -125,7 +125,7 @@ app.get('/callback', function (req, res) {
         // Store the tokens safely here
         req.session.access_token = body.access_token;
         req.session.refresh_token = body.refresh_token;
-        res.redirect(baseurl);
+        res.redirect("/");
       }
     });
   }
