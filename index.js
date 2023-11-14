@@ -131,6 +131,15 @@ app.get('/callback', function (req, res) {
   }
 });
 
+app.get('/logout', function (req, res) {
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
+  });
+});
 
 // refresh token when expired
 app.get('/refresh_token', function (req, res) {
