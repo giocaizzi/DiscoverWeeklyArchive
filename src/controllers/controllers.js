@@ -6,8 +6,8 @@ import crypto from 'crypto';
 // config
 import config from '../config.js';
 // services
-import { getUserInfo } from '../services/spotify/user.js';
-import { getTokens } from '../services/spotify/login.js';
+import { getUserInfo } from '../services/spotify/userService.js';
+import { getTokens } from '../services/spotify/loginService.js';
 
 //utils
 const generateRandomString = (length) => {
