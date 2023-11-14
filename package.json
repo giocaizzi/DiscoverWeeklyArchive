@@ -5,14 +5,20 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2",
-    "open": "^9.1.0"
+    "nodemon": "^3.0.1",
+    "open": "^9.1.0",
+    "querystring": "^0.2.1",
+    "request": "^2.88.2"
   }
 }
