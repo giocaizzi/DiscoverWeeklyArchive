@@ -35,10 +35,14 @@ const generateRandomString = (length) => {
 
 var stateKey = 'spotify_auth_state';
 
+
+/// APP
 var app = express();
 
 app.use(cors())
   .use(cookieParser());
+
+// ROUTES
 
 app.get('/login', function (req, res) {
 
@@ -147,6 +151,9 @@ app.get('/refresh_token', function (req, res) {
     }
   });
 });
+
+
+// MAIN
 
 console.log('Listening on 8888');
 app.listen(8888);
