@@ -1,8 +1,9 @@
 import express from 'express';
 
 // controllers
-import { login,callback,logout, refreshToken } from '../controllers/loginControllers.js';
-import { homepage,user } from '../controllers/userControllers.js';
+import { login,callback,logout, refreshToken } from '../controllers/spotify/loginControllers.js';
+import { homepage,user } from '../controllers/spotify/userControllers.js';
+import { discoverWeeklyArchive } from '../controllers/discoverWeeklyArchiveControllers.js';
 
 
 // set router
@@ -19,9 +20,12 @@ router.get('/callback', callback);
 // logout
 router.get('/logout', logout);
 // refresh token when expired
-router.get('/refresh_token',refreshToken );
+router.get('/refresh-token',refreshToken );
 
 //user
 router.get('/user', user);
+
+//discover-weekly-archive
+router.get('/discover-weekly-archive', discoverWeeklyArchive);
 
 export default router;

@@ -1,9 +1,9 @@
 import querystring from 'querystring';
 
 // config
-import config from '../config.js';
+import config from '../../config.js';
 // services
-import { generateRandomString, generateAuthUrl, getTokens } from '../services/spotify/loginService.js';
+import { generateRandomString, generateAuthUrl, getTokens } from '../../services/spotify/loginService.js';
 
 
 // login

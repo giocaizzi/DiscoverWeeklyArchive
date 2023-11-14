@@ -1,5 +1,5 @@
 // services
-import { getUserInfo } from '../services/spotify/userService.js';
+import { getUserInfo } from '../../services/spotify/userService.js';
 
 
 
