@@ -24,7 +24,7 @@ export function login(req, res) {
 export function logout(req, res) {
     req.session.destroy(function (err) {
         if (err) {
-            console.log(err);
+            res.json(err);
         } else {
             res.redirect('/');
         }
@@ -82,6 +82,6 @@ export function callback(req, res) {
                 })
             .catch(
                 // else send error
-                error => res.status(500).send(error));
+                error => res.status(500).json(error));
     }
 }

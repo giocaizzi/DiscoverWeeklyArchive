@@ -8,7 +8,7 @@ export function discoverWeeklyArchive(playlistId) {
                 "playlistId": playlistId
             })
         } else {
-            reject('discoverWeeklyArchive')
+            reject('Playlist ID is required.')
         }
     });
 }

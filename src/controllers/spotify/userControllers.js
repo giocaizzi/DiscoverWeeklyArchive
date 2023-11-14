@@ -24,5 +24,5 @@ export function user(req, res) {
                 userInfo => res.status(200).json(userInfo))
             .catch(
                 // else send error
-                error => res.status(500).send(error));
+                error => res.status(500).json(error));
 }  
