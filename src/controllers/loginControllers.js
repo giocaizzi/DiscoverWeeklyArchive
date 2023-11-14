@@ -1,32 +1,9 @@
 import querystring from 'querystring';
 
-
 // config
 import config from '../config.js';
 // services
-import { getUserInfo } from '../services/spotify/userService.js';
 import { generateRandomString, generateAuthUrl, getTokens } from '../services/spotify/loginService.js';
-
-
-
-
-
-// homepage
-export function homepage(req, res) {
-    // if the user is logged in get user info
-    if (req.session.access_token) {
-        getUserInfo(req.session.access_token)
-            .then(
-                // if successful send user info
-                userInfo => res.send(userInfo))
-            .catch(
-                // else send error
-                error => res.status(500).send(error));
-    } else {
-        // else send login page text
-        res.send('Login to use DiscoverWeeklyArchive!');
-    }
-}
 
 
 // login
@@ -57,8 +34,10 @@ export function logout(req, res) {
 
 // refresh token when expired
 export function refreshToken(req, res) {
+    // TODO: test this
     var refresh_token = req.query.refresh_token;
-    getTokens(refresh_token, isRenewal = true)
+    var isRenewal = true;
+    getTokens(refresh_token, isRenewal)
         .then(
             tokens => {
                 req.session.access_token = tokens.access_token;
