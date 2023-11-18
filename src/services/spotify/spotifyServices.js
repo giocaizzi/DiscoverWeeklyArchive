@@ -1,9 +1,9 @@
-import { getRequest as get } from "../../helpers/requestHelpers.js";
+import { getRequest as getRequest } from "../../helpers/requestHelpers.js";
 
 
 // user info
 export function getUserInfo(accessToken) {
-  return get(
+  return getRequest(
     'https://api.spotify.com/v1/me',
     accessToken
   );
@@ -11,7 +11,7 @@ export function getUserInfo(accessToken) {
 
 // user playlists
 export function getUserPlaylists(accessToken) {
-  return get(
+  return getRequest(
     'https://api.spotify.com/v1/me/playlists',
     accessToken
   );
@@ -19,7 +19,7 @@ export function getUserPlaylists(accessToken) {
 
 // user specific playlist
 export function getPlaylist(accessToken, playlistId) {
-  return get(
+  return getRequest(
     `https://api.spotify.com/v1/playlists/${playlistId}`,
     accessToken
   );

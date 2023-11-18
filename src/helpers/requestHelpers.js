@@ -17,10 +17,25 @@ export function getRequest(url, accessToken) {
 
     request.get(options, function (error, response, body) {
       if (error) {
+        console.log("Request error: " + url)
+        console.log(error);
         reject(response);
       } else {
+        console.log("Request successful: " + url)
         resolve(body);
       }
     });
   });
+}
+
+export function getRequestController(serviceFunction) {
+  return function (req, res) {
+    serviceFunction(req.session.access_token)
+      .then(
+        // if successful send user info
+        response => res.status(200).json(response))
+      .catch(
+        // else send error
+        error => res.status(500).json({ "Message": "Error 500", "Error": error }));
+  }
 }
