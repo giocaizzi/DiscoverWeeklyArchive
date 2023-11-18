@@ -7,7 +7,7 @@ import request from 'request';
 // reject -> transition to pending to rejected
 
 
-export function getRequest(url, accessToken, items = []) {
+export function getRequest(url, accessToken) {
   return new Promise((resolve, reject) => {
     var options = {
       url: url,
