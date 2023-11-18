@@ -1,9 +1,8 @@
 import express from 'express';
 
 // controllers
-import { login,callback,logout, refreshToken } from '../controllers/spotify/loginControllers.js';
-import { homepage,user } from '../controllers/spotify/userControllers.js';
-import { playlist } from '../controllers/spotify/playlistControllers.js';
+import { login, callback, logout, refreshToken } from '../controllers/spotify/loginControllers.js';
+import { homepage, user, userPlaylists, playlist } from '../controllers/spotify/spotifyControllers.js';
 import { discoverWeeklyArchiveController } from '../controllers/discoverWeeklyArchiveController.js';
 
 
@@ -25,14 +24,16 @@ router.get('/callback', callback);
 // logout
 router.get('/logout', logout);
 // refresh token when expired
-router.get('/refresh-token',refreshToken );
+router.get('/refresh-token', refreshToken);
 
 //////////////////////////
 // USER 
 // user info
 router.get('/user', user);
+// user playlists
+router.get('/user/playlists', userPlaylists);
 // playlist
-router.get('/user/playlists/:playlistId',playlist );
+router.get('/user/playlists/:playlistId', playlist);
 
 //////////////////////////
 //discover-weekly-archive
