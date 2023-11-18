@@ -87,6 +87,6 @@ export function callback(req, res) {
                 })
             .catch(
                 // else send error
-                error => res.status(500).json(error));
+                error => res.status(500).json({ "message": "login error", "error": error}));
     }
 }

@@ -30,7 +30,13 @@ export function getRequest(url, accessToken) {
 
 export function getRequestController(serviceFunction) {
   return function (req, res) {
-    serviceFunction(req.session.access_token)
+    const args = [req.session.access_token];
+    if (req.params) {
+      for (let param in req.params) {
+        args.push(req.params[param]);
+      }
+    }
+    serviceFunction(...args)
       .then(
         // if successful send user info
         response => res.status(200).json(response))
