@@ -7,7 +7,7 @@ import request from 'request';
 // reject -> transition to pending to rejected
 
 
-export function getRequest(url, accessToken) {
+export function getRequest(url, accessToken, items = []) {
   return new Promise((resolve, reject) => {
     var options = {
       url: url,
@@ -22,7 +22,12 @@ export function getRequest(url, accessToken) {
         reject(response);
       } else {
         console.log("Request successful: " + url)
-        resolve(body);
+        const allItems = items.concat(body);
+        if (body.next) {
+          getRequest(body.next, accessToken, allItems)
+        } else {
+          resolve(allItems);
+        }
       }
     });
   });
@@ -30,6 +35,8 @@ export function getRequest(url, accessToken) {
 
 export function getRequestController(serviceFunction) {
   return function (req, res) {
+    // if the service function requires more than just the access token
+    // then add the other params to the args array
     const args = [req.session.access_token];
     if (req.params) {
       for (let param in req.params) {
