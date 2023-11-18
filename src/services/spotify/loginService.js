@@ -15,7 +15,7 @@ export const generateRandomString = (length) => {
 }
 
 export function generateAuthUrl(state) {
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private playlist-read-private user-library-read';
   return 'https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',

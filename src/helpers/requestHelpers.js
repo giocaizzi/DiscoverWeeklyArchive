@@ -22,12 +22,7 @@ export function getRequest(url, accessToken, items = []) {
         reject(response);
       } else {
         console.log("Request successful: " + url)
-        const allItems = items.concat(body);
-        if (body.next) {
-          getRequest(body.next, accessToken, allItems)
-        } else {
-          resolve(allItems);
-        }
+        resolve(body);
       }
     });
   });
