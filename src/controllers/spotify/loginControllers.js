@@ -10,8 +10,10 @@ import { generateRandomString, generateAuthUrl, getTokens } from '../../services
 export function login(req, res) {
     // login with auth
     // application requests authorization
-    // by requesting to "authorize endpoint"
-    // if request is successful, the user is redirected to the redirect_uri
+    // by requesting to "authorize endpoint" created with generateAuthUrl
+    // if request is successful, the user is redirected to the redirect_uri page,
+    // that is defined in config and 
+    // specified on the Developer Spotify Dashboard,
     // with the authorization code
     // random state is generated to prevent CSRF attacks (see API docs)
     var state = generateRandomString(16);
@@ -22,10 +24,13 @@ export function login(req, res) {
 
 // logout
 export function logout(req, res) {
+    // destroy session to logout
     req.session.destroy(function (err) {
         if (err) {
+            // send error if logout unsuccessful
             res.json(err);
         } else {
+            // redirect to homepage if logout successful
             res.redirect('/');
         }
     });
