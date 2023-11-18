@@ -47,7 +47,7 @@ export function getTokens(code, isRenewal = false, refresh_token = null) {
 
     request.post(authOptions, function (error, response, body) {
       if (error) {
-        reject(error);
+        reject(response);
       } else if (response.statusCode !== 200) {
         reject(new Error(`Received status code ${response.statusCode}`));
       } else {

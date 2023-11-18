@@ -3,6 +3,7 @@ import express from 'express';
 // controllers
 import { login,callback,logout, refreshToken } from '../controllers/spotify/loginControllers.js';
 import { homepage,user } from '../controllers/spotify/userControllers.js';
+import { playlist } from '../controllers/spotify/playlistControllers.js';
 import { discoverWeeklyArchiveController } from '../controllers/discoverWeeklyArchiveController.js';
 
 
@@ -11,6 +12,10 @@ const router = express.Router();
 
 // homepage
 router.get('/', homepage);
+
+
+//////////////////////////
+// AUTH 
 // login
 router.get('/login', login);
 // callback
@@ -22,9 +27,14 @@ router.get('/logout', logout);
 // refresh token when expired
 router.get('/refresh-token',refreshToken );
 
-//user
+//////////////////////////
+// USER 
+// user info
 router.get('/user', user);
+// playlist
+router.get('/user/playlists/:playlistId',playlist );
 
+//////////////////////////
 //discover-weekly-archive
 router.get('/discover-weekly-archive/:playlistId', discoverWeeklyArchiveController);
 
