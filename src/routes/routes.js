@@ -2,7 +2,8 @@ import express from 'express';
 
 // controllers
 import { login, callback, logout, refreshToken } from '../controllers/spotify/loginControllers.js';
-import { homepage, user, userPlaylists, playlist } from '../controllers/spotify/spotifyControllers.js';
+import { homepage } from '../controllers/homeController.js';
+import { user, userPlaylists, playlist } from '../controllers/spotify/spotifyControllers.js';
 import { discoverWeeklyArchiveController } from '../controllers/discoverWeeklyArchiveController.js';
 
 
