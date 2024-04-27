@@ -9,11 +9,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 // routes
-import routes from "./routes/routes.js";
+import routes from "./routes.js";
 import config from "./config.js";
 
 var app = express();
 
+// TODO: verify
 app.use(cors()).use(cookieParser());
 
 // session

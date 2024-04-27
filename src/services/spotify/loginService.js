@@ -1,4 +1,3 @@
-import request from "request";
 import querystring from "querystring";
 import crypto from "crypto";
 
@@ -27,32 +26,34 @@ export function generateAuthUrl(state) {
 //get tokens, either by authorization code or refresh token
 
 export function getTokens(code, isRenewal = false, refresh_token = null) {
-  return new Promise((resolve, reject) => {
-    var authOptions = {
-      url: "https://accounts.spotify.com/api/token",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-        Authorization:
-          "Basic " +
-          new Buffer.from(
-            config.client_id + ":" + config.client_secret,
-          ).toString("base64"),
-      },
-      form: {
-        grant_type: isRenewal ? "refresh_token" : "authorization_code",
-        code: isRenewal ? null : code,
-        refresh_token: isRenewal ? refresh_token : null,
-        redirect_uri: config.redirect_uri,
-      },
-      json: true,
-    };
-
-    request.post(authOptions, function (error, response, body) {
-      if (error) {
-        reject(response);
-      } else {
-        resolve(body);
-      }
-    });
+  const fetchArgs = {
+    url: "https://accounts.spotify.com/api/token",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization:
+        "Basic " +
+        new Buffer.from(config.client_id + ":" + config.client_secret).toString(
+          "base64"
+        ),
+    },
+    body: {
+      grant_type: isRenewal ? "refresh_token" : "authorization_code",
+      code: isRenewal ? null : code,
+      refresh_token: isRenewal ? refresh_token : null,
+      redirect_uri: config.redirect_uri,
+    },
+  };
+  // POST request to get tokens
+  const response = fetch(fetchArgs.url, {
+    method: "POST",
+    headers: fetchArgs.headers,
+    body: JSON.stringify(fetchArgs.body),
   });
+  if (response.ok) {
+      // if response is ok, return json
+    return response.json();
+  } else {
+    // else throw error
+    throw new Error("Error getting tokens");
+  }
 }

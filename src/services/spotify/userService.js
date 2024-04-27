@@ -1,4 +1,4 @@
-import { getData } from "../../helpers/requestHelpers.js";
+import { getData } from "../../utils.js";
 
 // user info
 export function getUserInfo(accessToken) {

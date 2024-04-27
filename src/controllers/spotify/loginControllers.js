@@ -27,15 +27,18 @@ export function login(req, res) {
 // logout
 export function logout(req, res) {
   // destroy session to logout
-  req.session.destroy(function (err) {
-    if (err) {
-      // send error if logout unsuccessful
-      res.json(err);
-    } else {
-      // redirect to homepage if logout successful
-      res.redirect("/");
+  req.session.destroy(
+    // callback on session destroy
+    function (err) {
+      if (err) {
+        // send error if logout unsuccessful
+        res.json(err);
+      } else {
+        // redirect to homepage if logout successful
+        res.redirect("/");
+      }
     }
-  });
+  );
 }
 
 // refresh token when expired
@@ -43,13 +46,17 @@ export function refreshToken(req, res) {
   // TODO: test this
   var refresh_token = req.query.refresh_token;
   var isRenewal = true;
-  getTokens(refresh_token, isRenewal)
-    .then((tokens) => {
-      req.session.access_token = tokens.access_token;
-      req.session.refresh_token = tokens.refresh_token;
-      res.redirect("/");
-    })
-    .catch((error) => res.status(500).send(error));
+  try {
+    const tokens = getTokens(refresh_token, isRenewal);
+    // store tokens in session
+    req.session.access_token = tokens.access_token;
+    req.session.refresh_token = tokens.refresh_token;
+    // redirect to homepage
+    res.redirect("/");
+  } catch (error) {
+    // send error
+    res.status(500).json({ message: "refresh error", error: error });
+  }
 }
 
 // callback
@@ -68,28 +75,23 @@ export function callback(req, res) {
         // querystring.stringify converts object to string
         querystring.stringify({
           error: "state_mismatch",
-        }),
+        })
     );
   } else {
     // else it's a valid stare
     // clear cookie
     res.clearCookie(config.stateKey);
-    // get tokens
-    getTokens(code)
-      .then(
-        // if successful
-        (tokens) => {
-          // store tokens in session
-          req.session.access_token = tokens.access_token;
-          req.session.refresh_token = tokens.refresh_token;
-          // redirect to homepage
-          res.redirect("/");
-        },
-      )
-      .catch(
-        // else send error
-        (error) =>
-          res.status(500).json({ message: "login error", error: error }),
-      );
+    try {
+      // get tokens
+      const tokens = getTokens(code);
+      // store tokens in session
+      req.session.access_token = tokens.access_token;
+      req.session.refresh_token = tokens.refresh_token;
+      // redirect to homepage
+      res.redirect("/");
+    } catch (error) {
+      // send error
+      res.status(500).json({ message: "login error", error: error });
+    }
   }
 }

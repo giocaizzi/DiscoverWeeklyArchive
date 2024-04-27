@@ -6,7 +6,7 @@ import {
   getUserInfo,
   getUserPlaylists,
   getPlaylist,
-} from "../../services/spotify/spotifyServices.js";
+} from "../../services/spotify/userService.js";
 
 // user
 export const user = getController(getUserInfo);

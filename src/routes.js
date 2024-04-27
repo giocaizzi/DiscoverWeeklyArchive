@@ -1,19 +1,24 @@
 import express from "express";
 
-// controllers
+//// SPOTIFY
 import {
   login,
   callback,
   logout,
   refreshToken,
-} from "../controllers/spotify/loginControllers.js";
-import { homepage } from "../controllers/homeController.js";
+} from "./controllers/spotify/loginControllers.js";
 import {
   user,
   userPlaylists,
   playlist,
-} from "../controllers/spotify/spotifyControllers.js";
-import { discoverWeeklyArchiveController } from "../controllers/discoverWeeklyArchiveController.js";
+} from "./controllers/spotify/spotifyControllers.js";
+//// SMART-SPOTIFY
+// homepage
+import { homepage } from "./controllers/homeController.js";
+// discover-weekly-archive
+import { discoverWeeklyArchiveController } from "./controllers/discoverWeeklyArchiveController.js";
+
+
 
 // set router
 const router = express.Router();
