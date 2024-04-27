@@ -1,17 +1,30 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
+// Load environment variables from .env file
 dotenv.config();
 
+// Set port to 8888 if not specified in .env file
 const port = process.env.PORT || 8888;
 
+// Set up configuration object
 const config = {
-    client_id : process.env.CLIENT_ID,
-    client_secret : process.env.CLIENT_SECRET,
-    port:port,
-    redirect_uri : 'http://localhost:' + port + '/callback',
-    baseurl : "http://localhost:" + port + "/",
-    session_secret : process.env.SESSION_SECRET,
-    stateKey : 'spotify_auth_state',
-}
+  // // SPOTIFY API
+  // credentials from Spotify Developer Dashboard
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.CLIENT_SECRET,
+  // Redirect URI for Spotify API
+  redirect_uri: "http://localhost:" + port + "/callback",
+
+  // // SERVER
+  // Port to run the server on
+  port: port,
+  baseurl: "http://localhost:" + port + "/",
+
+  // // EXPRESS
+  // secret
+  session_secret: process.env.SESSION_SECRET,
+  // State key
+  stateKey: "spotify_auth_state",
+};
 
 export default config;

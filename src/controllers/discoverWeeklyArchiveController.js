@@ -1,5 +1,5 @@
-import { discoverWeeklyArchive } from '../services/discoverWeeklyArchiveService.js';
+import { discoverWeeklyArchive } from "../services/discoverWeeklyArchiveService.js";
 
 export function discoverWeeklyArchiveController(req, res) {
-    res.json(discoverWeeklyArchive(req.params.playlistId))
+  res.json(discoverWeeklyArchive(req.params.playlistId));
 }

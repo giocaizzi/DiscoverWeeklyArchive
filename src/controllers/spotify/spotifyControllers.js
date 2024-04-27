@@ -1,13 +1,17 @@
 // helper for get request
-import { getRequestController } from '../../helpers/requestHelpers.js';
+import { getRequestController } from "../../helpers/requestHelpers.js";
 
 // services
-import { getUserInfo, getUserPlaylists, getPlaylist } from '../../services/spotify/spotifyServices.js';
+import {
+  getUserInfo,
+  getUserPlaylists,
+  getPlaylist,
+} from "../../services/spotify/spotifyServices.js";
 
-// user 
+// user
 export const user = getRequestController(getUserInfo);
 
-// playlists 
+// playlists
 export const userPlaylists = getRequestController(getUserPlaylists);
 
 // playlist

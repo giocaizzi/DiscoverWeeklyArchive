@@ -1,4 +1,4 @@
-import request from 'request';
+import request from "request";
 
 // Promise object is the eventual completion of failure of async
 // one of three states: pending, fulfilled, or rejected
@@ -6,22 +6,21 @@ import request from 'request';
 // resolve -> transition to pending to fulfilled
 // reject -> transition to pending to rejected
 
-
 export function getRequest(url, accessToken) {
   return new Promise((resolve, reject) => {
     var options = {
       url: url,
-      headers: { 'Authorization': 'Bearer ' + accessToken },
-      json: true
+      headers: { Authorization: "Bearer " + accessToken },
+      json: true,
     };
 
     request.get(options, function (error, response, body) {
       if (error) {
-        console.log("Request error: " + url)
+        console.log("Request error: " + url);
         console.log(error);
         reject(response);
       } else {
-        console.log("Request successful: " + url)
+        console.log("Request successful: " + url);
         resolve(body);
       }
     });
@@ -41,9 +40,11 @@ export function getRequestController(serviceFunction) {
     serviceFunction(...args)
       .then(
         // if successful send user info
-        response => res.status(200).json(response))
+        (response) => res.status(200).json(response),
+      )
       .catch(
         // else send error
-        error => res.status(500).json({ "Message": "Error 500", "Error": error }));
-  }
+        (error) => res.status(500).json({ Message: "Error 500", Error: error }),
+      );
+  };
 }
