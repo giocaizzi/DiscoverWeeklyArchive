@@ -1,5 +1,5 @@
 // helper for get request
-import { getRequestController } from "../../helpers/requestHelpers.js";
+import { getController } from "../base.js";
 
 // services
 import {
@@ -9,10 +9,10 @@ import {
 } from "../../services/spotify/spotifyServices.js";
 
 // user
-export const user = getRequestController(getUserInfo);
+export const user = getController(getUserInfo);
 
 // playlists
-export const userPlaylists = getRequestController(getUserPlaylists);
+export const userPlaylists = getController(getUserPlaylists);
 
 // playlist
-export const playlist = getRequestController(getPlaylist);
+export const playlist = getController(getPlaylist);

@@ -24,7 +24,7 @@ const config = {
   // secret
   session_secret: process.env.SESSION_SECRET,
   // State key
-  stateKey: "spotify_auth_state",
+  stateKey: process.env.STATE_KEY,
 };
 
 export default config;
