@@ -7,7 +7,7 @@ export async function getData(url, accessToken) {
     },
   });
   if (response.ok) {
-    return response.json();
+    return await response.json();
   } else {
     throw new Error("Error fetching data");
   }

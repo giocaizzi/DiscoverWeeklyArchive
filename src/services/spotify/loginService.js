@@ -25,7 +25,7 @@ export function generateAuthUrl(state) {
 
 //get tokens, either by authorization code or refresh token
 
-export function getTokens(code, isRenewal = false, refresh_token = null) {
+export async function getTokens(code, isRenewal = false, refresh_token = null) {
   const fetchArgs = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
@@ -44,14 +44,14 @@ export function getTokens(code, isRenewal = false, refresh_token = null) {
     },
   };
   // POST request to get tokens
-  const response = fetch(fetchArgs.url, {
+  const response = await fetch(fetchArgs.url, {
     method: "POST",
     headers: fetchArgs.headers,
     body: JSON.stringify(fetchArgs.body),
   });
   if (response.ok) {
       // if response is ok, return json
-    return response.json();
+    return await response.json();
   } else {
     // else throw error
     throw new Error("Error getting tokens");
