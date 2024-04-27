@@ -1,6 +1,6 @@
 {
-  "name": "discover-weekly-archive",
-  "version": "1.0.0",
+  "name": "smart-spotify",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "type": "module",
