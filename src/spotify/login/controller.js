@@ -1,24 +1,12 @@
 import querystring from "querystring";
-
-// config
 import config from "../../config.js";
 // services
-import {
-  generateRandomString,
-  generateAuthUrl,
-  getTokens,
-} from "../../services/spotify/loginService.js";
+import { generateRandomString, generateAuthUrl, getTokens } from "./service.js";
+
+// https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 
 // login
 export function login(req, res) {
-  // login with auth
-  // application requests authorization
-  // by requesting to "authorize endpoint" created with generateAuthUrl
-  // if request is successful, the user is redirected to the redirect_uri page,
-  // that is defined in config and
-  // specified on the Developer Spotify Dashboard,
-  // with the authorization code
-  // random state is generated to prevent CSRF attacks (see API docs)
   var state = generateRandomString(16);
   res.cookie(config.stateKey, state);
   res.redirect(generateAuthUrl(state));
@@ -32,12 +20,12 @@ export function logout(req, res) {
     function (err) {
       if (err) {
         // send error if logout unsuccessful
-        res.json(err);
+        res.json({ message: "logout error", error: err });
       } else {
         // redirect to homepage if logout successful
         res.redirect("/");
       }
-    }
+    },
   );
 }
 
@@ -60,7 +48,7 @@ export function refreshToken(req, res) {
 }
 
 // callback
-export function callback(req, res) {
+export async function callback(req, res) {
   // application requests refresh and access tokens
   // after checking the state parameter
   var code = req.query.code || null;
@@ -69,13 +57,11 @@ export function callback(req, res) {
 
   /// check the state
   if (state === null || state !== storedState) {
-    // if there is a state mismatch, error
     res.redirect(
       "/#" +
-        // querystring.stringify converts object to string
         querystring.stringify({
           error: "state_mismatch",
-        })
+        }),
     );
   } else {
     // else it's a valid stare
@@ -83,7 +69,7 @@ export function callback(req, res) {
     res.clearCookie(config.stateKey);
     try {
       // get tokens
-      const tokens = getTokens(code);
+      const tokens = await getTokens(code);
       // store tokens in session
       req.session.access_token = tokens.access_token;
       req.session.refresh_token = tokens.refresh_token;
@@ -91,7 +77,7 @@ export function callback(req, res) {
       res.redirect("/");
     } catch (error) {
       // send error
-      res.status(500).json({ message: "login error", error: error });
+      res.status(500).json({ message: "login error", error: error.message });
     }
   }
 }

@@ -29,14 +29,14 @@ export async function getTokens(code, isRenewal = false, refresh_token = null) {
   const fetchArgs = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
-      "Content-Type": "application/json",
+      "content-type": "application/x-www-form-urlencoded",
       Authorization:
         "Basic " +
         new Buffer.from(config.client_id + ":" + config.client_secret).toString(
-          "base64"
+          "base64",
         ),
     },
-    body: {
+    form: {
       grant_type: isRenewal ? "refresh_token" : "authorization_code",
       code: isRenewal ? null : code,
       refresh_token: isRenewal ? refresh_token : null,
@@ -47,13 +47,14 @@ export async function getTokens(code, isRenewal = false, refresh_token = null) {
   const response = await fetch(fetchArgs.url, {
     method: "POST",
     headers: fetchArgs.headers,
-    body: JSON.stringify(fetchArgs.body),
+    form: fetchArgs.form,
   });
+  const json = await response.json();
   if (response.ok) {
-      // if response is ok, return json
-    return await response.json();
+    // if response is ok, return json
+    return json;
   } else {
     // else throw error
-    throw new Error("Error getting tokens");
+    throw new Error(`Error getting tokens: ${JSON.stringify(json)}`);
   }
 }

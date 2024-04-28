@@ -1,4 +1,9 @@
-export function getController(serviceFunction) {
+// services
+import { getUserInfo, getUserPlaylists, getPlaylist } from "../user/service.js";
+
+// base controller
+
+export function baseController(serviceFunction) {
   // return a function that takes a request and a response
   return function (req, res) {
     // add the access token to the args array
@@ -21,3 +26,12 @@ export function getController(serviceFunction) {
     }
   };
 }
+
+// user
+export const user = baseController(getUserInfo);
+
+// playlists
+export const userPlaylists = baseController(getUserPlaylists);
+
+// playlist
+export const playlist = baseController(getPlaylist);

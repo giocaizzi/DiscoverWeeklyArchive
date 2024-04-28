@@ -6,19 +6,13 @@ import {
   callback,
   logout,
   refreshToken,
-} from "./controllers/spotify/loginControllers.js";
-import {
-  user,
-  userPlaylists,
-  playlist,
-} from "./controllers/spotify/spotifyControllers.js";
+} from "./spotify/login/controller.js";
+import { user, userPlaylists, playlist } from "./spotify/user/controller.js";
 //// SMART-SPOTIFY
 // homepage
-import { homepage } from "./controllers/homeController.js";
+import { homepage } from "./smart-spotify/home.js";
 // discover-weekly-archive
-import { discoverWeeklyArchiveController } from "./controllers/discoverWeeklyArchiveController.js";
-
-
+import { discoverWeeklyArchiveController } from "./smart-spotify/discover-weekly-archive/controller.js";
 
 // set router
 const router = express.Router();
