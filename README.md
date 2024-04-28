@@ -1,6 +1,8 @@
-# Discover Weekly Archive
+# smart-spotify
 
-Discover weekly archive.
+Tools to make Spotify smart.
+
+- Discover weekly archive.
 
 ## Configuration
 
