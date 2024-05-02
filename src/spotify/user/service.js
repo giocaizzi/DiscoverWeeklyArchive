@@ -5,6 +5,11 @@ export function getUserInfo(accessToken) {
   return getData("https://api.spotify.com/v1/me", accessToken);
 }
 
+// user tracks
+export function getTracks(accessToken) {
+  return getData("https://api.spotify.com/v1/me/tracks", accessToken);
+}
+
 // user playlists
 export function getUserPlaylists(accessToken) {
   return getData("https://api.spotify.com/v1/me/playlists", accessToken);
@@ -17,3 +22,4 @@ export function getPlaylist(accessToken, playlistId) {
     accessToken,
   );
 }
+
