@@ -22,7 +22,7 @@ export function baseController(serviceFunction) {
       res.status(200).json(response);
     } catch (error) {
       // if there is an error, return the error
-      res.status(500).json({ Message: "Error 500", Error: error });
+      res.status(500).json({ message: "Internal error", error: error.message });
     }
   };
 }
