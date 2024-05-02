@@ -36,11 +36,11 @@ router.get("/refresh-token", refreshToken);
 //////////////////////////
 // USER
 // user info
-router.get("/user", user);
+router.get("/me", user);
 // user playlists
-router.get("/user/playlists", userPlaylists);
+router.get("/playlists", userPlaylists);
 // playlist
-router.get("/user/playlists/:playlistId", playlist);
+router.get("/playlists/:playlistId", playlist);
 
 //////////////////////////
 //discover-weekly-archive
