@@ -26,8 +26,14 @@ export function generateAuthUrl(state) {
 //get tokens, either by authorization code or refresh token
 
 export async function getTokens(code, isRenewal = false, refresh_token = null) {
-  const fetchArgs = {
+  let fetchArgs = {
     url: "https://accounts.spotify.com/api/token",
+    form: {
+      grant_type: isRenewal ? "refresh_token" : "authorization_code",
+      code: isRenewal ? null : code,
+      refresh_token: isRenewal ? refresh_token : null,
+      redirect_uri: config.redirect_uri,
+    },
     headers: {
       "content-type": "application/x-www-form-urlencoded",
       Authorization:
@@ -36,18 +42,13 @@ export async function getTokens(code, isRenewal = false, refresh_token = null) {
           "base64",
         ),
     },
-    form: {
-      grant_type: isRenewal ? "refresh_token" : "authorization_code",
-      code: isRenewal ? null : code,
-      refresh_token: isRenewal ? refresh_token : null,
-      redirect_uri: config.redirect_uri,
-    },
+    json: true
   };
   // POST request to get tokens
   const response = await fetch(fetchArgs.url, {
     method: "POST",
     headers: fetchArgs.headers,
-    form: fetchArgs.form,
+    body: new URLSearchParams(fetchArgs.form),
   });
   const json = await response.json();
   if (response.ok) {
