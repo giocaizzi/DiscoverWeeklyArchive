@@ -6,9 +6,10 @@ export async function getData(url, accessToken) {
       "Content-Type": "application/json",
     },
   });
+  const json = await response.json();
   if (response.ok) {
-    return await response.json();
+    return json
   } else {
-    throw new Error("Error fetching data");
+    throw new Error(`Error fetching data: ${JSON.stringify(json)}`);
   }
 }
