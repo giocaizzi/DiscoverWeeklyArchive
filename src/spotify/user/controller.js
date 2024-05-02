@@ -4,6 +4,7 @@ import {
   getTracks,
   getPlaylists,
   getPlaylist,
+  getPlaylistTracks
 } from "../user/service.js";
 
 // base controller
@@ -43,3 +44,5 @@ export const playlists = baseController(getPlaylists);
 
 // playlist
 export const playlist = baseController(getPlaylist);
+// playlist tracks
+export const playlistTracks = baseController(getPlaylistTracks);

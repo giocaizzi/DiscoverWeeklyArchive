@@ -12,6 +12,7 @@ import {
   tracks,
   playlists,
   playlist,
+  playlistTracks
 } from "./spotify/user/controller.js";
 //// SMART-SPOTIFY
 // homepage
@@ -48,6 +49,8 @@ router.get("/tracks", tracks);
 router.get("/playlists", playlists);
 // playlist
 router.get("/playlists/:playlistId", playlist);
+// playlist tracks
+router.get("/playlists/:playlistId/tracks", playlistTracks);
 
 //////////////////////////
 //discover-weekly-archive

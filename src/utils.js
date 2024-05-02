@@ -13,3 +13,14 @@ export async function getData(url, accessToken) {
     throw new Error(`Error fetching data: ${json.error.message}`);
   }
 }
+
+export async function getPaginatedData(url, accessToken) {
+  let items = [];
+  let nextPageUrl = url;
+  while (nextPageUrl) {
+    const data = await getData(nextPageUrl, accessToken);
+    items = items.concat(data.items);
+    nextPageUrl = data.next;
+  }
+  return items;
+}
