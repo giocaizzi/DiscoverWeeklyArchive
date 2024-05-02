@@ -7,7 +7,12 @@ import {
   logout,
   refreshToken,
 } from "./spotify/login/controller.js";
-import { user, tracks, userPlaylists, playlist } from "./spotify/user/controller.js";
+import {
+  me,
+  tracks,
+  playlists,
+  playlist,
+} from "./spotify/user/controller.js";
 //// SMART-SPOTIFY
 // homepage
 import { homepage } from "./smart-spotify/home.js";
@@ -36,11 +41,11 @@ router.get("/refresh-token", refreshToken);
 //////////////////////////
 // USER
 // info
-router.get("/me", user);
+router.get("/me", me);
 // tracks
 router.get("/tracks", tracks);
 // playlists
-router.get("/playlists", userPlaylists);
+router.get("/playlists", playlists);
 // playlist
 router.get("/playlists/:playlistId", playlist);
 

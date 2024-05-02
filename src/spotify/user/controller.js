@@ -1,5 +1,10 @@
 // services
-import { getUserInfo, getTracks, getUserPlaylists, getPlaylist } from "../user/service.js";
+import {
+  getMe,
+  getTracks,
+  getPlaylists,
+  getPlaylist,
+} from "../user/service.js";
 
 // base controller
 
@@ -28,13 +33,13 @@ export function baseController(serviceFunction) {
 }
 
 // user
-export const user = baseController(getUserInfo);
+export const me = baseController(getMe);
 
 // tracks
 export const tracks = baseController(getTracks);
 
 // playlists
-export const userPlaylists = baseController(getUserPlaylists);
+export const playlists = baseController(getPlaylists);
 
 // playlist
 export const playlist = baseController(getPlaylist);

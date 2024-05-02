@@ -1,25 +1,58 @@
 import { getData } from "../../utils.js";
 
 // user info
-export function getUserInfo(accessToken) {
-  return getData("https://api.spotify.com/v1/me", accessToken);
+export async function getMe(accessToken) {
+  let meData = await getData("https://api.spotify.com/v1/me", accessToken);
+  return {
+    "id": meData.id,
+    "name": meData.display_name,
+  };
 }
 
 // user tracks
-export function getTracks(accessToken) {
-  return getData("https://api.spotify.com/v1/me/tracks", accessToken);
+export async function getTracks(accessToken) {
+  return await getData("https://api.spotify.com/v1/me/tracks", accessToken);
 }
 
 // user playlists
-export function getUserPlaylists(accessToken) {
-  return getData("https://api.spotify.com/v1/me/playlists", accessToken);
+export async function getPlaylists(accessToken) {
+  // get the playlists data
+  let playlistsData = await getData(
+    "https://api.spotify.com/v1/me/playlists",
+    accessToken
+  );
+
+  // extract needed data
+  let playlists = [];
+
+  playlistsData.items.forEach(
+    (playlist) => {
+      playlists.push({
+        "id": playlist.id,
+        "name": playlist.name,
+        "total_tracks": playlist.tracks.total,
+      });
+
+    }
+  );
+
+  // return the playlists;
+  return {
+    total: playlistsData.total,
+    "playlists": playlists
+  };
 }
 
 // user specific playlist
-export function getPlaylist(accessToken, playlistId) {
-  return getData(
+export async function getPlaylist(accessToken, playlistId) {
+  let playlistData = await getData(
     `https://api.spotify.com/v1/playlists/${playlistId}`,
-    accessToken,
+    accessToken
   );
+  return {
+    "id": playlistData.id,
+    "name": playlistData.name,
+    "total_tracks": playlistData.tracks.total,
+    "tracks" : playlistData.tracks.items.length,
+  };
 }
-

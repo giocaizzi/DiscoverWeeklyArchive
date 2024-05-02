@@ -42,7 +42,7 @@ export async function getTokens(code, isRenewal = false, refresh_token = null) {
           "base64",
         ),
     },
-    json: true
+    json: true,
   };
   // POST request to get tokens
   const response = await fetch(fetchArgs.url, {

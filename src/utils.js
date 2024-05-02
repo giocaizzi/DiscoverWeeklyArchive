@@ -8,8 +8,8 @@ export async function getData(url, accessToken) {
   });
   const json = await response.json();
   if (response.ok) {
-    return json
+    return json;
   } else {
-    throw new Error(`Error fetching data: ${JSON.stringify(json)}`);
+    throw new Error(`Error fetching data: ${json.error.message}`);
   }
 }
